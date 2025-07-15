@@ -14,6 +14,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url), 307);
   }
 
+  if (pathname === "/dashboard" && isLoggedIn) {
+    return NextResponse.redirect(
+      new URL("/dashboard/overview", request.url),
+      307,
+    );
+  }
+
   const protectedRoutes = ["/dashboard"];
 
   const isProtected = protectedRoutes.some((route) =>
