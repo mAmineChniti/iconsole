@@ -18,6 +18,7 @@ import {
   Square,
   Trash2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const getStatusColor = (status: InstanceStatus) => {
@@ -48,6 +49,7 @@ const getStatusBg = (status: InstanceStatus) => {
 
 export default function Servers() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const {
     data: servers,
@@ -157,27 +159,45 @@ export default function Servers() {
 
   if (error) {
     return (
-      <Card className="border-destructive">
-        <CardContent className="pt-6">
-          <div className="flex items-center space-x-2 text-destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <span>Error loading servers: {error.message}</span>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex justify-center items-center min-h-[40vh]">
+        <Card className="w-full border-destructive bg-gradient-to-br from-destructive/10 to-background/80 shadow-lg shadow-destructive/10">
+          <CardContent className="flex flex-col items-center gap-4 py-8">
+            <AlertTriangle className="h-10 w-10 text-destructive mb-2" />
+            <div className="text-lg font-semibold text-destructive">
+              Error loading servers
+            </div>
+            <div className="text-sm text-muted-foreground text-center">
+              {error.message}
+            </div>
+            <Button
+              variant="destructive"
+              onClick={() => router.refresh()}
+              className="mt-2 cursor-pointer"
+            >
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (!servers || servers.length === 0) {
     return (
-      <Card>
-        <CardContent className="pt-6">
-          <div className="text-center text-muted-foreground">
-            <ServerIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>No servers found</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex justify-center items-center min-h-[40vh]">
+        <Card className="w-full bg-gradient-to-br from-card via-background/90 to-muted/30 backdrop-blur-sm shadow-lg shadow-primary/10">
+          <CardContent className="flex flex-col items-center gap-4 py-12">
+            <ServerIcon className="h-16 w-16 text-muted-foreground/50 mb-2" />
+            <div className="text-xl font-semibold text-foreground">
+              No servers found
+            </div>
+            <div className="text-sm text-muted-foreground text-center max-w-md">
+              Your server list is empty. Servers will appear here once they are
+              created in your OpenStack environment.
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 

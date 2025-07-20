@@ -11,9 +11,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"
-        defaultTheme="dark"
-        enableSystem={false}
-        forcedTheme="dark"
+        defaultTheme="system"
+        enableSystem={true}
         disableTransitionOnChange
       >
         {children}
@@ -22,7 +21,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           closeButton
           expand={true}
           duration={3000}
-          theme="dark"
           richColors
           toastOptions={{
             style: {

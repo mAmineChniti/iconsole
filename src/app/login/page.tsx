@@ -14,9 +14,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const LoginSkeleton = () => (
   <div className="flex h-screen items-center justify-center px-4 py-8 relative overflow-hidden">
-    <div className="absolute inset-0 bg-gradient-to-br from-chart-1/10 via-background to-chart-2/10" />
-    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-br from-chart-1/20 to-chart-2/20 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-tl from-chart-5/20 to-chart-4/20 rounded-full blur-3xl animate-pulse delay-1000" />
+    <div className="absolute inset-0 bg-gradient-to-br from-gradient-primary/10 via-background to-gradient-secondary/10" />
+    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-br from-gradient-primary/20 to-gradient-secondary/20 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-tl from-gradient-accent/20 to-gradient-secondary/20 rounded-full blur-3xl animate-pulse delay-1000" />
 
     <Card className="w-full max-w-md relative z-10 bg-gradient-to-br from-card/90 via-background/95 to-card/90 border border-border/50 shadow-2xl shadow-primary/10 backdrop-blur-xl">
       <CardHeader className="text-center space-y-4 pb-8">
@@ -34,7 +34,7 @@ const LoginSkeleton = () => (
         <div className="space-y-6 w-full">
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-chart-1 rounded-full" />
+              <div className="w-2 h-2 bg-gradient-primary rounded-full" />
               Region
             </Label>
             <Skeleton className="h-12 w-full rounded-md" />
