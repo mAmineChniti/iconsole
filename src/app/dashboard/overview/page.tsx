@@ -14,8 +14,8 @@ export default function OverviewPage() {
         <main className="flex-1 p-8 overflow-y-auto relative">
           <div className="max-w-7xl mx-auto">
             <div className="mb-8">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground via-chart-1 to-chart-2 bg-clip-text text-transparent drop-shadow-md">
-                Infrastructure Dashboard
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-gradient-primary via-gradient-secondary to-gradient-accent bg-clip-text text-transparent drop-shadow-md">
+                Infrastructure Overview
               </h1>
               <p className="text-muted-foreground mt-2 text-lg">
                 Real-time system monitoring and analytics
