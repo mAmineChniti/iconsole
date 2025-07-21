@@ -1,30 +1,31 @@
-import Overview from "@/components/Overview";
-import { Sidebar } from "@/components/Sidebar";
 import { type Metadata } from "next";
+
+import { Overview } from "@/components/Overview";
+import { Sidebar } from "@/components/Sidebar";
 
 export const metadata: Metadata = {
   title: "IConsole | Overview",
+  description: "Infrastructure overview and system monitoring dashboard",
 };
 
 export default function OverviewPage() {
   return (
-    <div className="flex h-screen relative">
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col backdrop-blur-sm">
-        <main className="flex-1 p-8 overflow-y-auto relative">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-gradient-primary via-gradient-secondary to-gradient-accent bg-clip-text text-transparent drop-shadow-md">
-                Infrastructure Overview
-              </h1>
-              <p className="text-muted-foreground mt-2 text-lg">
-                Real-time system monitoring and analytics
-              </p>
-            </div>
-            <Overview />
+      <main className="flex-1 min-h-screen">
+        <div className="container mx-auto p-6 max-w-7xl space-y-6">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-white dark:from-blue-400 dark:to-white bg-clip-text text-transparent select-none">
+              Infrastructure Overview
+            </h1>
+            <p className="text-muted-foreground">
+              Monitor your infrastructure health, resources, and services in
+              real-time
+            </p>
           </div>
-        </main>
-      </div>
+          <Overview />{" "}
+        </div>
+      </main>
     </div>
   );
 }

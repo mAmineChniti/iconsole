@@ -4,11 +4,11 @@ import { Sidebar } from "@/components/Sidebar";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
-  title: "IConsole | Images",
-  description: "Manage your system images and templates",
+  title: "IConsole | Instances",
+  description: "Manage your virtual machine instances",
 };
 
-export default function ImagesPage() {
+export default function InstancesPage() {
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -16,17 +16,17 @@ export default function ImagesPage() {
         <div className="container mx-auto p-6 max-w-7xl space-y-6">
           <div className="space-y-1">
             <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Images
+              Instances
             </h1>
             <p className="text-muted-foreground">
-              Manage system images and virtual machine templates
+              Manage and monitor your virtual machine instances
             </p>
           </div>
 
           <Card className="border-dashed">
             <CardContent className="p-8 text-center">
               <p className="text-muted-foreground">
-                No images found. Upload your first image to get started.
+                No instances found. Create your first instance to get started.
               </p>
             </CardContent>
           </Card>

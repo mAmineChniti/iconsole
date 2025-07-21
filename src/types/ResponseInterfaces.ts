@@ -30,6 +30,164 @@ interface Image {
 
 export type ImageListResponse = Image[];
 
+export interface AuthPingResponse {
+  message: "auth ok";
+}
+
+export interface InstanceListItem {
+  instance_name: string;
+  image_name: string;
+  ip_address: string;
+  flavor: string;
+  key_pair: string;
+  status: string;
+  availability_zone: string;
+  task: string;
+  power_state: string;
+  age: string;
+  id: string;
+}
+
+export type InstanceListResponse = InstanceListItem[];
+
+export interface FlavorDetails {
+  name: string;
+  ram: string;
+  vcpus: number;
+  disk: string;
+}
+
+export interface ImageDetails {
+  name: string;
+  id: string;
+}
+
+export interface NetworkDetails {
+  network: string;
+  ip: string;
+  type: string;
+}
+
+export interface VolumeDetails {
+  id: string;
+  name: string;
+  size: string;
+}
+
+export interface InstanceDetailsResponse {
+  id: string;
+  name: string;
+  status: string;
+  locked: boolean;
+  project_id: string;
+  created_at: string;
+  host: string;
+  flavor: FlavorDetails;
+  image: ImageDetails;
+  networks: NetworkDetails[];
+  security_groups: string[];
+  volumes: VolumeDetails[];
+  floating_ips: string[];
+}
+
+export interface VMCreateRequest {
+  name: string;
+  image_id: string;
+  flavor_id: string;
+  network_id: string;
+  key_name: string;
+  security_group: string;
+  admin_password: string;
+  admin_username: string;
+}
+
+export interface VMCreateResponse {
+  status: "success";
+  server: {
+    id: string;
+    name: string;
+    status: string;
+    admin_username: string;
+    admin_password: string;
+    ssh_key: string;
+    floating_ip: string;
+  };
+}
+
+export interface VMwareImportRequest {
+  vm_name: string;
+  description?: string;
+  min_disk?: number;
+  min_ram?: number;
+  is_public?: boolean;
+  flavor_id: string;
+  network_id: string;
+  key_name: string;
+  security_group: string;
+  admin_password?: string;
+  vmdk_file: File;
+}
+
+export interface VMwareImportResponse {
+  status: "success";
+  image: {
+    id: string;
+    name: string;
+  };
+  server: {
+    id: string;
+    name: string;
+    status: string;
+    floating_ip: string;
+  };
+}
+
+export interface ResourceFlavor {
+  id: string;
+  name: string;
+}
+
+export interface ResourceImage {
+  id: string;
+  name: string;
+}
+
+export interface ResourceNetwork {
+  id: string;
+  name: string;
+}
+
+export interface ResourceKeypair {
+  name: string;
+}
+
+export interface ResourceSecurityGroup {
+  name: string;
+}
+
+export interface ResourcesResponse {
+  images: ResourceImage[];
+  flavors: ResourceFlavor[];
+  networks: ResourceNetwork[];
+  keypairs: ResourceKeypair[];
+  security_groups: ResourceSecurityGroup[];
+}
+
+export interface QemuImgCheckResponse {
+  installed: boolean;
+  version: string;
+}
+
+export interface ImageImportFromUrlResponse {
+  message: string;
+  image_id: string;
+  visibility: string;
+}
+
+export interface UserPingResponse {
+  message: "User service OK";
+}
+
 export interface ProjectPingResponse {
   message: "Project service is working";
 }
