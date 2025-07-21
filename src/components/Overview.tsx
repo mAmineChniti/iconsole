@@ -5,7 +5,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Cpu,
-  Database,
+  FolderDot,
   HardDrive,
   MemoryStick,
   Network,
@@ -18,6 +18,7 @@ import {
 
 import { InfraService } from "@/lib/requests";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -267,7 +268,7 @@ export function Overview() {
           <CardContent>
             <div className="flex items-center gap-3 mb-3">
               <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
-                <Database className="h-6 w-6 text-green-600 dark:text-green-400" />
+                <FolderDot className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="text-sm font-medium text-muted-foreground">
                 Projects
@@ -570,81 +571,164 @@ export function Overview() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-full">
-                <Zap className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-full">
+                  <Zap className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                </div>
+                Compute Services
               </div>
-              Compute Services
+              <div className="text-xs text-muted-foreground">
+                {
+                  compute_services.filter(
+                    (s) => s.status === "enabled" && s.state === "up",
+                  ).length
+                }
+                /{compute_services.length} healthy
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {compute_services.map((service, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
-                >
-                  <div className="flex items-center gap-3">
-                    {service.status === "enabled" && service.state === "up" ? (
-                      <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    ) : (
-                      <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                    )}
-                    <div>
-                      <p className="font-medium text-sm">{service.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {service.host}
-                      </p>
+              {compute_services.map((service, index) => {
+                const isHealthy =
+                  service.status === "enabled" && service.state === "up";
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                      isHealthy
+                        ? "bg-muted/50 hover:bg-muted/70"
+                        : "bg-red-50/80 dark:bg-red-900/20 hover:bg-red-50 dark:hover:bg-red-900/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        {isHealthy ? (
+                          <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                        )}
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            isHealthy
+                              ? "bg-green-500 animate-pulse"
+                              : "bg-red-500 animate-pulse"
+                          }`}
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{service.name}</p>
+                        <p className="text-xs text-muted-foreground font-mono">
+                          {service.host}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right flex items-center gap-2">
+                      <Badge
+                        variant={
+                          service.status === "enabled" ? "default" : "secondary"
+                        }
+                        className={
+                          service.status === "enabled"
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                            : undefined
+                        }
+                      >
+                        {service.status}
+                      </Badge>
+                      <Badge
+                        variant={
+                          service.state === "up" ? "default" : "destructive"
+                        }
+                        className={
+                          service.state === "up"
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                            : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+                        }
+                      >
+                        {service.state}
+                      </Badge>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs font-medium">{service.status}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {service.state}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <div className="p-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-full">
-                <Network className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-full">
+                  <Network className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+                </div>
+                Network Services
               </div>
-              Network Services
+              <div className="text-xs text-muted-foreground">
+                {network_services.filter((s) => s.alive).length}/
+                {network_services.length} online
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {network_services.map((service, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
-                >
-                  <div className="flex items-center gap-3">
-                    {service.alive ? (
-                      <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    ) : (
-                      <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                    )}
-                    <div>
-                      <p className="font-medium text-sm">{service.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {service.host}
-                      </p>
+              {network_services.map((service, index) => {
+                const isOnline = service.alive;
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                      isOnline
+                        ? "bg-muted/50 hover:bg-muted/70"
+                        : "bg-red-50/80 dark:bg-red-900/20 hover:bg-red-50 dark:hover:bg-red-900/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        {isOnline ? (
+                          <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                        )}
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            isOnline
+                              ? "bg-green-500 animate-pulse"
+                              : "bg-red-500 animate-pulse"
+                          }`}
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{service.name}</p>
+                        <p className="text-xs text-muted-foreground font-mono">
+                          {service.host}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <Badge
+                        variant={isOnline ? "default" : "destructive"}
+                        className={`gap-1.5 ${
+                          isOnline
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                            : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+                        }`}
+                      >
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            isOnline
+                              ? "bg-green-500 animate-pulse"
+                              : "bg-red-500"
+                          }`}
+                        />
+                        {isOnline ? "Online" : "Offline"}
+                      </Badge>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs font-medium">
-                      {service.alive ? "Online" : "Offline"}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>

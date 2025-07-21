@@ -72,10 +72,10 @@ export function Sidebar() {
     <div className="sticky top-0 flex flex-col h-screen w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
       <div className="flex items-center p-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 rounded-full flex items-center justify-center">
             <Shield className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-white dark:from-blue-400 dark:to-white bg-clip-text text-transparent select-none">
+          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent select-none">
             IConsole
           </span>
         </div>
@@ -104,7 +104,7 @@ export function Sidebar() {
         {user && (
           <div className="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-slate-800">
             <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-medium">
+              <AvatarFallback className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white text-sm font-medium">
                 {user.username.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>

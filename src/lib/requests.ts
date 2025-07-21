@@ -3,11 +3,9 @@ import type {
   AuthPingResponse,
   DashboardOverviewResponse,
   ImageImportFromUrlResponse,
-  ImageListResponse,
   InstanceDetailsResponse,
   InstanceListResponse,
   NovaActionResponse,
-  NovaServersResponse,
   ProjectPingResponse,
   QemuImgCheckResponse,
   ResourcesResponse,
@@ -26,17 +24,15 @@ const API_CONFIG = {
     ENDPOINTS: {
       AUTH_PING: "/auth/ping",
       INSTANCES: "/nova/instances",
-      SERVERS: "/nova/servers",
-      SERVER_DETAILS: "/nova/servers",
+      INSTANCE_DETAILS: "/nova/servers",
       CREATE_VM: "/nova/create-vm",
       IMPORT_VMWARE: "/nova/import-vmware-vm",
-      START_SERVER: "/nova/start",
-      STOP_SERVER: "/nova/stop",
-      REBOOT_SERVER: "/nova/reboot",
-      DELETE_SERVER: "/nova/delete",
+      START_INSTANCE: "/nova/start",
+      STOP_INSTANCE: "/nova/stop",
+      REBOOT_INSTANCE: "/nova/reboot",
+      DELETE_INSTANCE: "/nova/delete",
       RESOURCES: "/nova/resources",
       CHECK_QEMU_IMG: "/nova/check-qemu-img",
-      LIST_IMAGES: "/image/images",
       IMPORT_FROM_URL: "/image/images/import-from-url",
       OVERVIEW: "/dashboard/overview",
       PING_PROJECT: "/projects/ping",
@@ -77,7 +73,7 @@ export const InfraService = {
   ): Promise<InstanceDetailsResponse> {
     const result = await client.get<InstanceDetailsResponse>(
       API_CONFIG.INFRA.BASE_URL +
-        API_CONFIG.INFRA.ENDPOINTS.SERVER_DETAILS +
+        API_CONFIG.INFRA.ENDPOINTS.INSTANCE_DETAILS +
         `/${instanceId}`,
     );
     if (result.error) {
@@ -145,78 +141,65 @@ export const InfraService = {
     return result.data;
   },
 
-  async listServers(): Promise<NovaServersResponse> {
-    const result = await client.get<NovaServersResponse>(
-      API_CONFIG.INFRA.BASE_URL + API_CONFIG.INFRA.ENDPOINTS.SERVERS,
-    );
-    if (result.error) {
-      throw new Error(`Error fetching servers: ${result.error.message}`);
-    }
-    if (!result.data) {
-      throw new Error("No data received from servers endpoint");
-    }
-    return result.data;
-  },
-
-  async startServer(serverId: string): Promise<NovaActionResponse> {
+  async startInstance(instanceId: string): Promise<NovaActionResponse> {
     const result = await client.post<NovaActionResponse>(
       API_CONFIG.INFRA.BASE_URL +
-        API_CONFIG.INFRA.ENDPOINTS.START_SERVER +
-        `/${serverId}`,
+        API_CONFIG.INFRA.ENDPOINTS.START_INSTANCE +
+        `/${instanceId}`,
       { type: "json", data: {} },
     );
     if (result.error) {
-      throw new Error(`Error starting server: ${result.error.message}`);
+      throw new Error(`Error starting instance: ${result.error.message}`);
     }
     if (!result.data) {
-      throw new Error("No data received from start server endpoint");
+      throw new Error("No data received from start instance endpoint");
     }
     return result.data;
   },
 
-  async stopServer(serverId: string): Promise<NovaActionResponse> {
+  async stopInstance(instanceId: string): Promise<NovaActionResponse> {
     const result = await client.post<NovaActionResponse>(
       API_CONFIG.INFRA.BASE_URL +
-        API_CONFIG.INFRA.ENDPOINTS.STOP_SERVER +
-        `/${serverId}`,
+        API_CONFIG.INFRA.ENDPOINTS.STOP_INSTANCE +
+        `/${instanceId}`,
       { type: "json", data: {} },
     );
     if (result.error) {
-      throw new Error(`Error stopping server: ${result.error.message}`);
+      throw new Error(`Error stopping instance: ${result.error.message}`);
     }
     if (!result.data) {
-      throw new Error("No data received from stop server endpoint");
+      throw new Error("No data received from stop instance endpoint");
     }
     return result.data;
   },
 
-  async rebootServer(serverId: string): Promise<NovaActionResponse> {
+  async rebootInstance(instanceId: string): Promise<NovaActionResponse> {
     const result = await client.post<NovaActionResponse>(
       API_CONFIG.INFRA.BASE_URL +
-        API_CONFIG.INFRA.ENDPOINTS.REBOOT_SERVER +
-        `/${serverId}`,
+        API_CONFIG.INFRA.ENDPOINTS.REBOOT_INSTANCE +
+        `/${instanceId}`,
       { type: "json", data: {} },
     );
     if (result.error) {
-      throw new Error(`Error rebooting server: ${result.error.message}`);
+      throw new Error(`Error rebooting instance: ${result.error.message}`);
     }
     if (!result.data) {
-      throw new Error("No data received from reboot server endpoint");
+      throw new Error("No data received from reboot instance endpoint");
     }
     return result.data;
   },
 
-  async deleteServer(serverId: string): Promise<NovaActionResponse> {
+  async deleteInstance(instanceId: string): Promise<NovaActionResponse> {
     const result = await client.delete<NovaActionResponse>(
       API_CONFIG.INFRA.BASE_URL +
-        API_CONFIG.INFRA.ENDPOINTS.DELETE_SERVER +
-        `/${serverId}`,
+        API_CONFIG.INFRA.ENDPOINTS.DELETE_INSTANCE +
+        `/${instanceId}`,
     );
     if (result.error) {
-      throw new Error(`Error deleting server: ${result.error.message}`);
+      throw new Error(`Error deleting instance: ${result.error.message}`);
     }
     if (!result.data) {
-      throw new Error("No data received from delete server endpoint");
+      throw new Error("No data received from delete instance endpoint");
     }
     return result.data;
   },
@@ -239,19 +222,6 @@ export const InfraService = {
     }
     if (!result.data) {
       throw new Error("No data received from import image endpoint");
-    }
-    return result.data;
-  },
-
-  async listImages(): Promise<ImageListResponse> {
-    const result = await client.get<ImageListResponse>(
-      API_CONFIG.INFRA.BASE_URL + API_CONFIG.INFRA.ENDPOINTS.LIST_IMAGES,
-    );
-    if (result.error) {
-      throw new Error(`Error fetching images: ${result.error.message}`);
-    }
-    if (!result.data) {
-      throw new Error("No data received from images endpoint");
     }
     return result.data;
   },
