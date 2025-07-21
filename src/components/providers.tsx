@@ -22,14 +22,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           expand={true}
           duration={3000}
           richColors
-          toastOptions={{
-            style: {
-              background: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
-              color: "hsl(var(--card-foreground))",
-            },
-            className: "shadow-lg",
-          }}
         />
       </ThemeProvider>
     </QueryClientProvider>
