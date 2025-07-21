@@ -106,7 +106,7 @@ export default function Login() {
         <div className="text-center space-y-6">
           <div className="flex justify-center">
             <div className="relative">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
                 <Shield className="w-8 h-8 text-white" />
               </div>
               <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">

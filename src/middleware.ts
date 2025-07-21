@@ -4,36 +4,35 @@ import { NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const user = request.cookies.get("user");
-  const isLoggedIn = user ? true : false;
+  const isLoggedIn = !!user;
 
-  if (["/", "/login"].includes(pathname) && isLoggedIn) {
-    return NextResponse.redirect(new URL("/dashboard", request.url), 307);
-  }
+  const protectedRoutes = [
+    "/dashboard/overview",
+    "/dashboard/instances",
+    "/dashboard/images",
+  ];
 
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/login", request.url), 307);
+    return isLoggedIn
+      ? NextResponse.redirect(new URL("/dashboard/overview", request.url))
+      : NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (pathname === "/dashboard" && isLoggedIn) {
-    return NextResponse.redirect(
-      new URL("/dashboard/overview", request.url),
-      307,
-    );
+  if ((pathname === "/dashboard" || pathname === "/login") && isLoggedIn) {
+    return NextResponse.redirect(new URL("/dashboard/overview", request.url));
   }
 
-  const protectedRoutes = ["/dashboard"];
+  const isProtectedRoute =
+    protectedRoutes.some((route) => pathname.startsWith(route)) ||
+    pathname === "/dashboard";
 
-  const isProtected = protectedRoutes.some((route) =>
-    pathname.startsWith(route),
-  );
-
-  if (isProtected && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", request.url), 307);
+  if (isProtectedRoute && !isLoggedIn) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/login", "/dashboard"],
+  matcher: ["/", "/login", "/dashboard/:path*"],
 };

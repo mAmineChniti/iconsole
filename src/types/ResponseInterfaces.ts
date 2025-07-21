@@ -10,26 +10,6 @@ export type ImageStatus = "active" | "queued" | "saving";
 type ServiceStatus = "enabled" | "disabled";
 type ServiceState = "up" | "down";
 
-interface Server {
-  id: string;
-  name: string;
-  status: InstanceStatus;
-}
-
-export type NovaServersResponse = Server[];
-
-export interface NovaActionResponse {
-  message: string;
-}
-
-interface Image {
-  id: string;
-  name: string;
-  status: ImageStatus;
-}
-
-export type ImageListResponse = Image[];
-
 export interface AuthPingResponse {
   message: "auth ok";
 }
@@ -49,6 +29,10 @@ export interface InstanceListItem {
 }
 
 export type InstanceListResponse = InstanceListItem[];
+
+export interface NovaActionResponse {
+  message: string;
+}
 
 export interface FlavorDetails {
   name: string;
@@ -178,6 +162,22 @@ export interface QemuImgCheckResponse {
   version: string;
 }
 
+interface Image {
+  id: string;
+  name: string;
+  status: ImageStatus;
+}
+
+export type ImageListResponse = Image[];
+
+interface Instance {
+  id: string;
+  name: string;
+  status: InstanceStatus;
+}
+
+export type NovaInstancesResponse = Instance[];
+
 export interface ImageImportFromUrlResponse {
   message: string;
   image_id: string;
@@ -211,7 +211,7 @@ interface VolumeResources {
   total: number;
   available: number;
   "in-use": number;
-  error: number;
+  error?: number;
   OTHERS: number;
 }
 
@@ -220,6 +220,7 @@ interface CpuResources {
   total: number;
   unused: number;
   usage_percent: number;
+  note?: string;
 }
 
 interface RamResources {
@@ -227,6 +228,7 @@ interface RamResources {
   total: number;
   unused: number;
   usage_percent: number;
+  note?: string;
 }
 
 interface Resources {
@@ -254,4 +256,18 @@ export interface DashboardOverviewResponse {
   resources: Resources;
   compute_services: ComputeService[];
   network_services: NetworkService[];
+}
+
+export interface ImageImportFromUrlResponse {
+  message: string;
+  image_id: string;
+  visibility: string;
+}
+
+export interface UserPingResponse {
+  message: "User service OK";
+}
+
+export interface ProjectPingResponse {
+  message: "Project service is working";
 }
