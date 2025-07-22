@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,10 @@ const getCurrentUser = ():
       loginTime: string;
     }
   | undefined => {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
   try {
     const userCookie = getCookie("user");
     if (userCookie) {
@@ -60,6 +65,11 @@ const getCurrentUser = ():
 export function Sidebar() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = async () => {
     await deleteCookie("user");
@@ -101,7 +111,7 @@ export function Sidebar() {
       </nav>
 
       <div className="p-4 space-y-2">
-        {user && (
+        {mounted && user && (
           <div className="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-slate-800">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white text-sm font-medium">
@@ -126,13 +136,13 @@ export function Sidebar() {
           className="w-full h-10 justify-start px-3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
-          {theme === "dark" ? (
+          {mounted && theme === "dark" ? (
             <Sun className="h-4 w-4 mr-3" />
           ) : (
             <Moon className="h-4 w-4 mr-3" />
           )}
           <span className="text-sm font-medium">
-            {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            {mounted && theme === "dark" ? "Light Mode" : "Dark Mode"}
           </span>
         </Button>
 

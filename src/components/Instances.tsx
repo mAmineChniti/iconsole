@@ -108,9 +108,10 @@ function InstanceActions({
           disabled={startMutation.isPending}
           size="sm"
           variant="outline"
-          className="cursor-pointer transition-all duration-200 hover:bg-accent hover:text-accent-foreground rounded-full"
+          className="cursor-pointer rounded-full group transition-all duration-200"
         >
-          <Power className="h-4 w-4" />
+          <Power className="h-4 w-4 mr-1 group-hover:scale-110 transition-transform duration-200" />
+          Start
         </Button>
       )}
 
@@ -123,9 +124,10 @@ function InstanceActions({
           disabled={stopMutation.isPending}
           size="sm"
           variant="outline"
-          className="cursor-pointer transition-all duration-200 hover:bg-accent hover:text-accent-foreground rounded-full"
+          className="cursor-pointer rounded-full group transition-all duration-200"
         >
-          <PowerOff className="h-4 w-4" />
+          <PowerOff className="h-4 w-4 mr-1 group-hover:scale-110 transition-transform duration-200" />
+          Stop
         </Button>
       )}
 
@@ -138,9 +140,10 @@ function InstanceActions({
           disabled={rebootMutation.isPending}
           size="sm"
           variant="outline"
-          className="cursor-pointer transition-all duration-200 hover:bg-accent hover:text-accent-foreground rounded-full"
+          className="cursor-pointer rounded-full group transition-all duration-200"
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="h-4 w-4 mr-1 group-hover:rotate-180 transition-transform duration-300" />
+          Reboot
         </Button>
       )}
 
@@ -152,9 +155,10 @@ function InstanceActions({
         disabled={deleteMutation.isPending}
         size="sm"
         variant="outline"
-        className="cursor-pointer transition-all duration-200 hover:bg-accent hover:text-accent-foreground rounded-full"
+        className="cursor-pointer rounded-full group transition-all duration-200"
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="h-4 w-4 mr-1 group-hover:scale-110 transition-transform duration-200" />
+        Delete
       </Button>
     </div>
   );
@@ -398,7 +402,7 @@ export function Instances() {
         {visibleData.map((instance) => (
           <Card
             key={instance.id}
-            className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:shadow-lg transition-all duration-200 border border-border/50 cursor-pointer"
+            className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50 cursor-pointer"
             onClick={() => setSelectedInstance(instance)}
           >
             <CardHeader className="pb-3">
@@ -445,12 +449,15 @@ export function Instances() {
                   )}
                 </div>
               </div>
+              <p className="text-xs text-muted-foreground font-mono truncate mt-2 bg-muted/20 px-2 py-1 rounded-md">
+                ID: {instance.id}
+              </p>
             </CardHeader>
 
             <CardContent className="pt-0">
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-2 rounded-lg bg-blue-50/50 dark:bg-blue-900/10">
                     <div className="flex items-center gap-1.5">
                       <div className="p-1 bg-blue-100 dark:bg-blue-900/30 rounded">
                         <HardDrive className="h-3 w-3 text-blue-600 dark:text-blue-400" />
@@ -465,7 +472,7 @@ export function Instances() {
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-2 rounded-lg bg-purple-50/50 dark:bg-purple-900/10">
                     <div className="flex items-center gap-1.5">
                       <div className="p-1 bg-purple-100 dark:bg-purple-900/30 rounded">
                         <MemoryStick className="h-3 w-3 text-purple-600 dark:text-purple-400" />
@@ -483,7 +490,7 @@ export function Instances() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-2 rounded-lg bg-orange-50/50 dark:bg-orange-900/10">
                     <div className="flex items-center gap-1.5">
                       <div className="p-1 bg-orange-100 dark:bg-orange-900/30 rounded">
                         <Timer className="h-3 w-3 text-orange-600 dark:text-orange-400" />
@@ -498,7 +505,7 @@ export function Instances() {
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 p-2 rounded-lg bg-green-50/50 dark:bg-green-900/10">
                     <div className="flex items-center gap-1.5">
                       <div className="p-1 bg-green-100 dark:bg-green-900/30 rounded">
                         <Network className="h-3 w-3 text-green-600 dark:text-green-400" />
@@ -532,9 +539,9 @@ export function Instances() {
           onClick={handleShowMore}
           variant="outline"
           disabled={!hasMore}
-          className={`transition-all duration-200 ${
+          className={`transition-all duration-200 px-6 py-2 ${
             hasMore
-              ? "hover:bg-accent hover:text-accent-foreground"
+              ? "hover:bg-accent hover:text-accent-foreground hover:scale-105"
               : "opacity-50 cursor-not-allowed"
           }`}
         >
@@ -548,10 +555,12 @@ export function Instances() {
         open={!!selectedInstance}
         onOpenChange={() => setSelectedInstance(undefined)}
       >
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50 left-[calc(50%+8rem)] translate-x-[-50%]">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between pr-8">
-              <span>{selectedInstance?.name}</span>
+              <span className="text-xl font-semibold">
+                {selectedInstance?.name}
+              </span>
               <Badge
                 variant={
                   selectedInstance?.status === "ACTIVE"
@@ -584,6 +593,9 @@ export function Instances() {
                 {selectedInstance?.status}
               </Badge>
             </DialogTitle>
+            <p className="text-sm text-muted-foreground font-mono mt-2">
+              ID: {selectedInstance?.id}
+            </p>
           </DialogHeader>
 
           {selectedInstance && (

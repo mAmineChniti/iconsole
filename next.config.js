@@ -9,6 +9,22 @@ const config = {
   experimental: {
     reactCompiler: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        port: "",
+        pathname: "/lutgaru/linux-distro-logos/master/**",
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        port: "",
+        pathname: "/wikipedia/commons/**",
+      },
+    ],
+  },
 };
 
 export default config;

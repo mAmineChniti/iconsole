@@ -35,8 +35,8 @@ export function Overview() {
 
   if (isLoading) {
     return (
-      <div className="space-y-8">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="space-y-8 px-2 sm:px-4 lg:px-6 max-w-none">
+        <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <Card key={i}>
               <CardContent>
@@ -53,7 +53,7 @@ export function Overview() {
           ))}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
             <Card key={i}>
               <CardHeader>
@@ -81,7 +81,7 @@ export function Overview() {
           ))}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
             <Card
               key={i}
@@ -117,7 +117,7 @@ export function Overview() {
           ))}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-2">
           {Array.from({ length: 2 }).map((_, i) => (
             <Card key={i}>
               <CardHeader>
@@ -157,18 +157,18 @@ export function Overview() {
 
   if (error) {
     return (
-      <div className="space-y-6">
-        <Card className="border-destructive bg-destructive/5 backdrop-blur-sm">
+      <div className="space-y-6 px-2 sm:px-4 lg:px-6 max-w-none">
+        <Card className="border-destructive bg-destructive/5 backdrop-blur-sm w-full">
           <CardContent className="p-8 text-center">
             <div className="flex flex-col items-center space-y-4">
               <div className="p-3 bg-destructive/10 rounded-full">
                 <AlertTriangle className="h-8 w-8 text-destructive" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-destructive">
+                <h3 className="text-xl font-semibold text-destructive">
                   Failed to Load Overview Data
                 </h3>
-                <p className="text-sm text-muted-foreground max-w-md">
+                <p className="text-base text-muted-foreground max-w-md">
                   {error?.message ||
                     "Unable to fetch infrastructure data. Please check your connection and try again."}
                 </p>
@@ -199,16 +199,16 @@ export function Overview() {
 
   if (!data) {
     return (
-      <div className="space-y-6">
-        <Card className="border-muted bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+      <div className="space-y-6 px-2 sm:px-4 lg:px-6 max-w-none">
+        <Card className="border-muted bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm w-full">
           <CardContent className="p-8 text-center">
             <div className="flex flex-col items-center space-y-4">
               <div className="p-3 bg-muted rounded-full">
                 <Server className="h-8 w-8 text-muted-foreground" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">No Data Available</h3>
-                <p className="text-sm text-muted-foreground max-w-md">
+                <h3 className="text-xl font-semibold">No Data Available</h3>
+                <p className="text-base text-muted-foreground max-w-md">
                   Infrastructure data is not available at the moment. Please try
                   refreshing to load the latest information.
                 </p>
@@ -241,68 +241,68 @@ export function Overview() {
   const { platform_info, resources, compute_services, network_services } = data;
 
   return (
-    <div className="space-y-8">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+    <div className="space-y-6">
+      <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+        <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardContent>
             <div className="flex items-center gap-3 mb-3">
               <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full">
                 <Server className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-sm font-medium text-muted-foreground">
+              <h3 className="text-base font-medium text-muted-foreground">
                 Compute Nodes
               </h3>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-1">
+              <div className="text-4xl font-bold text-foreground mb-1">
                 {platform_info.nodes}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Active compute nodes
               </p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardContent>
             <div className="flex items-center gap-3 mb-3">
               <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
                 <FolderDot className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-sm font-medium text-muted-foreground">
+              <h3 className="text-base font-medium text-muted-foreground">
                 Projects
               </h3>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-1">
+              <div className="text-4xl font-bold text-foreground mb-1">
                 {platform_info.projects}
               </div>
-              <p className="text-xs text-muted-foreground">Total projects</p>
+              <p className="text-sm text-muted-foreground">Total projects</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardContent>
             <div className="flex items-center gap-3 mb-3">
               <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full">
                 <Users className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-sm font-medium text-muted-foreground">
+              <h3 className="text-base font-medium text-muted-foreground">
                 Users
               </h3>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-1">
+              <div className="text-4xl font-bold text-foreground mb-1">
                 {platform_info.users}
               </div>
-              <p className="text-xs text-muted-foreground">Registered users</p>
+              <p className="text-sm text-muted-foreground">Registered users</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardContent>
             <div className="flex items-center gap-3 mb-3">
               <div
@@ -318,17 +318,17 @@ export function Overview() {
                   <CheckCircle className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                 )}
               </div>
-              <h3 className="text-sm font-medium text-muted-foreground">
+              <h3 className="text-base font-medium text-muted-foreground">
                 System Health
               </h3>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-foreground mb-1">
+              <div className="text-4xl font-bold text-foreground mb-1">
                 {platform_info.hypervisor_errors.length > 0
                   ? "Issues"
                   : "Healthy"}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {platform_info.hypervisor_errors.length} errors detected
               </p>
             </div>
@@ -336,8 +336,8 @@ export function Overview() {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-3 md:gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+        <Card className="w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
@@ -348,42 +348,46 @@ export function Overview() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Total Instances</span>
-              <span className="text-2xl font-bold">
+              <span className="text-base font-medium">Total Instances</span>
+              <span className="text-3xl font-bold">
                 {resources.instances.total}
               </span>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-sm">
-                  Active: {resources.instances.ACTIVE}
-                </span>
+            <div className="flex justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-base">
+                    Active: {resources.instances.ACTIVE}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                  <span className="text-base">
+                    Stopped: {resources.instances.SHUTOFF}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                <span className="text-sm">
-                  Stopped: {resources.instances.SHUTOFF}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="text-sm">
-                  Error: {resources.instances.ERROR}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <span className="text-sm">
-                  Others: {resources.instances.OTHERS}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <span className="text-base">
+                    Error: {resources.instances.ERROR}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <span className="text-base">
+                    Others: {resources.instances.OTHERS}
+                  </span>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-full">
@@ -394,44 +398,48 @@ export function Overview() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Total Volumes</span>
-              <span className="text-2xl font-bold">
+              <span className="text-base font-medium">Total Volumes</span>
+              <span className="text-3xl font-bold">
                 {resources.volumes.total}
               </span>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span className="text-sm">
-                  Available: {resources.volumes.available}
-                </span>
+            <div className="flex justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <span className="text-base">
+                    Available: {resources.volumes.available}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  <span className="text-base">
+                    In-use: {resources.volumes["in-use"]}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                <span className="text-sm">
-                  In-use: {resources.volumes["in-use"]}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span className="text-sm">
-                  Error: {resources.volumes.error}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                <span className="text-sm">
-                  Others: {resources.volumes.OTHERS}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <span className="text-base">
+                    Error: {resources.volumes.error}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                  <span className="text-base">
+                    Others: {resources.volumes.OTHERS}
+                  </span>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-3 md:gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+        <Card className="w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
@@ -440,10 +448,10 @@ export function Overview() {
               CPU Usage
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center justify-center p-8">
-            <div className="relative w-32 h-32">
+          <CardContent className="flex items-center justify-center p-6">
+            <div className="relative w-40 h-40">
               <svg
-                className="w-32 h-32 transform -rotate-90"
+                className="w-40 h-40 transform -rotate-90"
                 viewBox="0 0 36 36"
               >
                 <path
@@ -468,30 +476,30 @@ export function Overview() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold text-foreground">
+                <span className="text-3xl font-bold text-foreground">
                   {resources.cpu.usage_percent.toFixed(1)}%
                 </span>
-                <span className="text-xs text-muted-foreground">CPU</span>
+                <span className="text-sm text-muted-foreground">CPU</span>
               </div>
             </div>
-            <div className="ml-8 space-y-3">
+            <div className="ml-10 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Used:</span>
-                <span className="text-sm font-medium">
+                <span className="text-base text-muted-foreground">Used:</span>
+                <span className="text-base font-medium">
                   {resources.cpu.used}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Total:</span>
-                <span className="text-sm font-medium">
+                <span className="text-base text-muted-foreground">Total:</span>
+                <span className="text-base font-medium">
                   {resources.cpu.total}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-base text-muted-foreground">
                   Available:
                 </span>
-                <span className="text-sm font-medium">
+                <span className="text-base font-medium">
                   {resources.cpu.unused}
                 </span>
               </div>
@@ -499,7 +507,7 @@ export function Overview() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
@@ -508,10 +516,10 @@ export function Overview() {
               RAM Usage
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex items-center justify-center p-8">
-            <div className="relative w-32 h-32">
+          <CardContent className="flex items-center justify-center p-6">
+            <div className="relative w-40 h-40">
               <svg
-                className="w-32 h-32 transform -rotate-90"
+                className="w-40 h-40 transform -rotate-90"
                 viewBox="0 0 36 36"
               >
                 <path
@@ -536,30 +544,30 @@ export function Overview() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold text-foreground">
+                <span className="text-3xl font-bold text-foreground">
                   {resources.ram.usage_percent.toFixed(1)}%
                 </span>
-                <span className="text-xs text-muted-foreground">RAM</span>
+                <span className="text-sm text-muted-foreground">RAM</span>
               </div>
             </div>
-            <div className="ml-8 space-y-3">
+            <div className="ml-10 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Used:</span>
-                <span className="text-sm font-medium">
+                <span className="text-base text-muted-foreground">Used:</span>
+                <span className="text-base font-medium">
                   {(resources.ram.used / 1024).toFixed(1)} GB
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Total:</span>
-                <span className="text-sm font-medium">
+                <span className="text-base text-muted-foreground">Total:</span>
+                <span className="text-base font-medium">
                   {(resources.ram.total / 1024).toFixed(1)} GB
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-base text-muted-foreground">
                   Available:
                 </span>
-                <span className="text-sm font-medium">
+                <span className="text-base font-medium">
                   {(resources.ram.unused / 1024).toFixed(1)} GB
                 </span>
               </div>
@@ -568,8 +576,8 @@ export function Overview() {
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-3 md:gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2">
+        <Card className="w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -578,7 +586,7 @@ export function Overview() {
                 </div>
                 Compute Services
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 {
                   compute_services.filter(
                     (s) => s.status === "enabled" && s.state === "up",
@@ -618,8 +626,8 @@ export function Overview() {
                         />
                       </div>
                       <div>
-                        <p className="font-medium text-sm">{service.name}</p>
-                        <p className="text-xs text-muted-foreground font-mono">
+                        <p className="font-medium text-base">{service.name}</p>
+                        <p className="text-sm text-muted-foreground font-mono">
                           {service.host}
                         </p>
                       </div>
@@ -657,7 +665,7 @@ export function Overview() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -666,7 +674,7 @@ export function Overview() {
                 </div>
                 Network Services
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-sm text-muted-foreground">
                 {network_services.filter((s) => s.alive).length}/
                 {network_services.length} online
               </div>
@@ -701,8 +709,8 @@ export function Overview() {
                         />
                       </div>
                       <div>
-                        <p className="font-medium text-sm">{service.name}</p>
-                        <p className="text-xs text-muted-foreground font-mono">
+                        <p className="font-medium text-base">{service.name}</p>
+                        <p className="text-sm text-muted-foreground font-mono">
                           {service.host}
                         </p>
                       </div>
@@ -749,7 +757,7 @@ export function Overview() {
                   key={index}
                   className="p-3 rounded-lg bg-destructive/10 border border-destructive/20"
                 >
-                  <p className="text-sm text-destructive font-medium">
+                  <p className="text-base text-destructive font-medium">
                     {error}
                   </p>
                 </div>
