@@ -5,17 +5,23 @@ import {
   HardDrive,
   LayoutGrid,
   LogOut,
+  MonitorStop,
   Moon,
   Server,
   Shield,
   Sun,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
 
 const sidebarItems = [
@@ -25,58 +31,101 @@ const sidebarItems = [
     href: "/dashboard/overview",
   },
   {
-    title: "Instances",
-    icon: Server,
-    href: "/dashboard/instances",
-  },
-  {
     title: "Images",
     icon: HardDrive,
     href: "/dashboard/images",
   },
 ];
 
-const getCurrentUser = ():
-  | {
-      username: string;
-      region: string;
-      loginTime: string;
-    }
-  | undefined => {
-  if (typeof window === "undefined") {
-    return undefined;
-  }
-
-  try {
-    const userCookie = getCookie("user");
-    if (userCookie) {
-      return JSON.parse(userCookie as string) as {
-        username: string;
-        region: string;
-        loginTime: string;
-      };
-    }
-  } catch {
-    return undefined;
-  }
-  return undefined;
+const collapsibleRoutes: Record<string, string[]> = {
+  compute: ["/dashboard/instances", "/dashboard/vm"],
 };
 
 export function Sidebar() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [collapsibleOpen, setCollapsibleOpen] = useState<
+    Record<string, boolean>
+  >(() => {
+    const getDefaultState = () =>
+      Object.keys(collapsibleRoutes).reduce(
+        (acc, key) => {
+          acc[key] = false;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("sidebar-collapsibles");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored) as Record<string, boolean>;
+          return { ...getDefaultState(), ...parsed };
+        } catch {
+          return getDefaultState();
+        }
+      }
+      return getDefaultState();
+    }
+    return getDefaultState();
+  });
+
+  let user:
+    | { username: string; region: string; loginTime: string }
+    | undefined = undefined;
+  if (typeof window !== "undefined") {
+    try {
+      const userCookie = getCookie("user");
+      if (userCookie) {
+        user = JSON.parse(userCookie as string) as {
+          username: string;
+          region: string;
+          loginTime: string;
+        };
+      }
+    } catch {
+      user = undefined;
+    }
+  }
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const pathname = usePathname();
+  useEffect(() => {
+    setCollapsibleOpen((prev) => {
+      const updated: Record<string, boolean> = { ...prev };
+      Object.keys(collapsibleRoutes).forEach((key) => {
+        const routes = collapsibleRoutes[key];
+        if (prev[key] && Array.isArray(routes)) {
+          if (!routes.includes(pathname)) {
+            updated[key] = false;
+          }
+        }
+      });
+      return updated;
+    });
+  }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "sidebar-collapsibles",
+        JSON.stringify(collapsibleOpen),
+      );
+    }
+  }, [collapsibleOpen]);
 
   const handleLogout = async () => {
     await deleteCookie("user");
     router.push("/login");
   };
 
-  const user = getCurrentUser();
+  const handleCollapsibleChange = (key: string, open: boolean) => {
+    setCollapsibleOpen((prev) => ({ ...prev, [key]: open }));
+  };
 
   return (
     <div className="sticky top-0 flex flex-col h-screen w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700">
@@ -95,18 +144,70 @@ export function Sidebar() {
 
       <nav className="flex-1 p-4">
         <ul className="space-y-2">
-          {sidebarItems.map((item) => (
-            <li key={item.href}>
-              <Button
-                variant="ghost"
-                className="w-full justify-start h-10 px-3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white cursor-pointer"
-                onClick={() => router.push(item.href)}
-              >
-                <item.icon className="h-4 w-4 mr-3" />
-                <span className="text-sm font-medium">{item.title}</span>
-              </Button>
-            </li>
-          ))}
+          {sidebarItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.href}>
+                <Button
+                  variant="ghost"
+                  className={`w-full justify-start h-10 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white
+                    ${isActive ? "bg-slate-100 dark:bg-slate-800 font-bold text-slate-900 dark:text-white" : "text-slate-700 dark:text-slate-300"}`}
+                  onClick={() => {
+                    router.push(item.href);
+                  }}
+                >
+                  <item.icon className="h-4 w-4 mr-3" />
+                  <span className="text-sm font-medium">{item.title}</span>
+                </Button>
+              </li>
+            );
+          })}
+          <li>
+            <Collapsible
+              open={collapsibleOpen.compute}
+              onOpenChange={(open) => handleCollapsibleChange("compute", open)}
+            >
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start h-10 px-3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+                >
+                  <Server className="h-4 w-4 mr-3" />
+                  <span className="text-sm font-medium">Compute</span>
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <ul className="pl-8 py-1 space-y-1">
+                  <li>
+                    <Button
+                      variant="ghost"
+                      className={`w-full justify-start h-9 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white
+                        ${pathname === "/dashboard/instances" ? "bg-slate-100 dark:bg-slate-800 font-bold text-slate-900 dark:text-white" : "text-slate-700 dark:text-slate-300"}`}
+                      onClick={() => {
+                        router.push("/dashboard/instances");
+                      }}
+                    >
+                      <Server className="h-4 w-4 mr-3" />
+                      <span className="text-sm font-medium">Instances</span>
+                    </Button>
+                  </li>
+                  <li>
+                    <Button
+                      variant="ghost"
+                      className={`w-full justify-start h-9 px-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white
+                        ${pathname === "/dashboard/vm" ? "bg-slate-100 dark:bg-slate-800 font-bold text-slate-900 dark:text-white" : "text-slate-700 dark:text-slate-300"}`}
+                      onClick={() => {
+                        router.push("/dashboard/vm");
+                      }}
+                    >
+                      <MonitorStop className="h-4 w-4 mr-3" />
+                      <span className="text-sm font-medium">VM</span>
+                    </Button>
+                  </li>
+                </ul>
+              </CollapsibleContent>
+            </Collapsible>
+          </li>
         </ul>
       </nav>
 

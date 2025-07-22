@@ -9,6 +9,7 @@ export function middleware(request: NextRequest) {
   const protectedRoutes = [
     "/dashboard/overview",
     "/dashboard/instances",
+    "/dashboard/vm",
     "/dashboard/images",
   ];
 

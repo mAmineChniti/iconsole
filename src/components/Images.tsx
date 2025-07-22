@@ -1,11 +1,12 @@
 "use client";
 
-import { HardDrive, Plus, Search, Server, Upload } from "lucide-react";
-import Image from "next/image";
+import { HardDrive, Plus, Search, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { ErrorCard } from "@/components/ErrorCard";
+import { getDistroIcon } from "@/components/getDistroIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -50,6 +51,7 @@ export function Images() {
     isLoading: loading,
     error,
     refetch: fetchImages,
+    isFetching,
   } = useQuery({
     queryKey: ["images"],
     queryFn: async () => {
@@ -80,194 +82,6 @@ export function Images() {
     },
   });
 
-  const getImageIcon = (imageName: string) => {
-    const name = imageName.toLowerCase();
-
-    const baseLogoUrl =
-      "https://raw.githubusercontent.com/lutgaru/linux-distro-logos/master";
-
-    const distroLogos: Record<string, { filename: string; alt: string }> = {
-      ubuntu: {
-        filename: "ubuntu.png",
-        alt: "Ubuntu",
-      },
-      kubuntu: {
-        filename: "kubuntu.png",
-        alt: "Kubuntu",
-      },
-      xubuntu: {
-        filename: "xubuntu.png",
-        alt: "Xubuntu",
-      },
-      lubuntu: {
-        filename: "lubuntu.png",
-        alt: "Lubuntu",
-      },
-      edubuntu: {
-        filename: "edubuntu.png",
-        alt: "Edubuntu",
-      },
-      ubuntustudio: {
-        filename: "ubuntustudio.png",
-        alt: "Ubuntu Studio",
-      },
-      mythbuntu: {
-        filename: "mythbuntu.png",
-        alt: "Mythbuntu",
-      },
-      centos: {
-        filename: "centos.png",
-        alt: "CentOS",
-      },
-      rhel: {
-        filename: "redhat.png",
-        alt: "Red Hat Enterprise Linux",
-      },
-      redhat: {
-        filename: "redhat.png",
-        alt: "Red Hat",
-      },
-      fedora: {
-        filename: "fedora.png",
-        alt: "Fedora",
-      },
-      scientific: {
-        filename: "scientific.png",
-        alt: "Scientific Linux",
-      },
-      debian: {
-        filename: "debian.png",
-        alt: "Debian",
-      },
-      mint: {
-        filename: "mint.png",
-        alt: "Linux Mint",
-      },
-      arch: {
-        filename: "arch.png",
-        alt: "Arch Linux",
-      },
-      manjaro: {
-        filename: "manjaro.png",
-        alt: "Manjaro",
-      },
-      antergos: {
-        filename: "arch.png",
-        alt: "Antergos",
-      },
-      opensuse: {
-        filename: "suse.png",
-        alt: "openSUSE",
-      },
-      suse: {
-        filename: "suse.png",
-        alt: "SUSE",
-      },
-      slackware: {
-        filename: "slackware.png",
-        alt: "Slackware",
-      },
-      alpine: {
-        filename: "alpine.png",
-        alt: "Alpine Linux",
-      },
-      gentoo: {
-        filename: "gentoo.png",
-        alt: "Gentoo",
-      },
-      mageia: {
-        filename: "mageia.png",
-        alt: "Mageia",
-      },
-      mandriva: {
-        filename: "mandriva.png",
-        alt: "Mandriva",
-      },
-      pclinuxos: {
-        filename: "pclinuxos.png",
-        alt: "PCLinuxOS",
-      },
-      puppy: {
-        filename: "puppy.png",
-        alt: "Puppy Linux",
-      },
-      sabayon: {
-        filename: "sabayon.png",
-        alt: "Sabayon",
-      },
-      elementary: {
-        filename: "elementary.png",
-        alt: "elementary OS",
-      },
-      zorin: {
-        filename: "zorin.png",
-        alt: "Zorin OS",
-      },
-      kali: {
-        filename: "backtrack.png",
-        alt: "Kali Linux",
-      },
-      windows: {
-        filename: "",
-        alt: "Windows",
-      },
-    };
-
-    let matchedDistro = undefined;
-    for (const [key, distroInfo] of Object.entries(distroLogos)) {
-      if (name.includes(key)) {
-        matchedDistro = { ...distroInfo, key };
-        break;
-      }
-    }
-
-    if (matchedDistro) {
-      if (matchedDistro.key === "windows") {
-        return (
-          <div className="flex-shrink-0">
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/32px-Windows_logo_-_2012.svg.png"
-              alt={matchedDistro.alt}
-              width={32}
-              height={32}
-              className="w-8 h-8"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = "none";
-                target.nextElementSibling?.classList.remove("hidden");
-              }}
-            />
-            <Server className="h-8 w-8 text-gray-600 dark:text-gray-400 hidden" />
-          </div>
-        );
-      }
-
-      return (
-        <div className="flex-shrink-0">
-          <Image
-            src={`${baseLogoUrl}/${matchedDistro.filename}`}
-            alt={matchedDistro.alt}
-            width={32}
-            height={32}
-            className="w-8 h-8"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = "none";
-              target.nextElementSibling?.classList.remove("hidden");
-            }}
-          />
-          <Server className="h-8 w-8 text-gray-600 dark:text-gray-400 hidden" />
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex-shrink-0">
-        <Server className="h-8 w-8 text-gray-600 dark:text-gray-400" />
-      </div>
-    );
-  };
-
   const handleImportImage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!importForm.imageUrl || !importForm.imageName) return;
@@ -287,7 +101,6 @@ export function Images() {
     setVisibleCount((prev) => prev + 6);
   };
 
-  // Reset pagination when search term changes
   useEffect(() => {
     setVisibleCount(6);
   }, [searchTerm]);
@@ -325,29 +138,15 @@ export function Images() {
 
   if (error) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight">Images</h2>
-            <p className="text-muted-foreground">
-              Manage system images and virtual machine templates
-            </p>
-          </div>
-          <Button
-            className="cursor-pointer"
-            onClick={() => fetchImages()}
-            variant="outline"
-          >
-            Retry
-          </Button>
-        </div>
-
-        <Card className="border-destructive">
-          <CardContent className="p-6">
-            <p className="text-destructive">{error?.message}</p>
-          </CardContent>
-        </Card>
-      </div>
+      <ErrorCard
+        title="Failed to Load Images"
+        message={
+          error?.message ||
+          "Unable to fetch image data. Please check your connection and try again."
+        }
+        onRetry={() => fetchImages()}
+        isRetrying={isFetching}
+      />
     );
   }
 
@@ -484,11 +283,11 @@ export function Images() {
           {visibleData.map((image) => (
             <Card
               key={image.id}
-              className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50 cursor-pointer"
+              className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50"
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
-                  {getImageIcon(image.name)}
+                  {getDistroIcon(image.name)}
                   <CardTitle className="text-lg font-semibold text-foreground truncate">
                     {image.name}
                   </CardTitle>
