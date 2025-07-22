@@ -141,6 +141,33 @@ export default function Login() {
               >
                 <FormField
                   control={form.control}
+                  name="region"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        Region
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="!h-12 w-full rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 cursor-pointer">
+                            <SelectValue placeholder="Select a region" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="RegionOne">RegionOne</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="text-xs text-red-500" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
@@ -209,33 +236,6 @@ export default function Login() {
                           </Button>
                         </div>
                       </FormControl>
-                      <FormMessage className="text-xs text-red-500" />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="region"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                        <Shield className="h-4 w-4" />
-                        Region
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="!h-12 w-full rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700">
-                            <SelectValue placeholder="Select a region" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="RegionOne">RegionOne</SelectItem>
-                        </SelectContent>
-                      </Select>
                       <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}

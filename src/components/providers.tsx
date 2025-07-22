@@ -17,7 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       >
         {children}
         <Toaster
-          position="bottom-right"
+          position="top-right"
           closeButton
           expand={true}
           duration={3000}
