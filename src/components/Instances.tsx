@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  AlertTriangle,
   HardDrive,
   Key,
   MapPin,
@@ -22,6 +21,7 @@ import { toast } from "sonner";
 import { InfraService } from "@/lib/requests";
 import type { InstanceDetailsResponse } from "@/types/ResponseInterfaces";
 
+import { ErrorCard } from "@/components/ErrorCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -301,43 +301,14 @@ export function Instances() {
 
   if (error) {
     return (
-      <div className="space-y-6">
-        <Card className="border-destructive bg-destructive/5 backdrop-blur-sm">
-          <CardContent className="p-8 text-center">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="p-3 bg-destructive/10 rounded-full">
-                <AlertTriangle className="h-8 w-8 text-destructive" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-destructive">
-                  Failed to Load Instances
-                </h3>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  There was an error loading your instances. Please check your
-                  connection and try again.
-                </p>
-              </div>
-              <Button
-                onClick={() => refetch()}
-                disabled={isFetching}
-                className="mt-4 cursor-pointer bg-destructive hover:bg-destructive/90 text-destructive-foreground transition-all duration-200"
-              >
-                {isFetching ? (
-                  <>
-                    <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                    Retrying...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Try Again
-                  </>
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <ErrorCard
+        title="Failed to Load Instances"
+        message={
+          "There was an error loading your instances. Please check your connection and try again."
+        }
+        onRetry={() => refetch()}
+        isRetrying={isFetching}
+      />
     );
   }
 
