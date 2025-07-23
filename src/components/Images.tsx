@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { ErrorCard } from "@/components/ErrorCard";
-import { getDistroIcon } from "@/components/getDistroIcon";
+import { GetDistroIcon } from "@/components/GetDistroIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -287,7 +287,9 @@ export function Images() {
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-3">
-                  {getDistroIcon(image.name)}
+                  <GetDistroIcon
+                    imageName={typeof image.name === "string" ? image.name : ""}
+                  />
                   <CardTitle className="text-lg font-semibold text-foreground truncate">
                     {image.name}
                   </CardTitle>

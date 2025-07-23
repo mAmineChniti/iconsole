@@ -45,31 +45,34 @@ export function Sidebar() {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [collapsibleOpen, setCollapsibleOpen] = useState<
-    Record<string, boolean>
-  >(() => {
-    const getDefaultState = () =>
-      Object.keys(collapsibleRoutes).reduce(
-        (acc, key) => {
-          acc[key] = false;
-          return acc;
-        },
-        {} as Record<string, boolean>,
-      );
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("sidebar-collapsibles");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored) as Record<string, boolean>;
-          return { ...getDefaultState(), ...parsed };
-        } catch {
-          return getDefaultState();
-        }
+
+  const getDefaultState = () =>
+    Object.keys(collapsibleRoutes).reduce(
+      (acc, key) => {
+        acc[key] = false;
+        return acc;
+      },
+      {} as Record<string, boolean>,
+    );
+
+  const [collapsibleOpen, setCollapsibleOpen] =
+    useState<Record<string, boolean>>(getDefaultState);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("sidebar-collapsibles");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as Record<string, boolean>;
+        setCollapsibleOpen({ ...getDefaultState(), ...parsed });
+      } catch (error) {
+        console.warn(
+          "Failed to parse sidebar-collapsibles from localStorage",
+          error,
+        );
+        // Invalid JSON, keep defaults
       }
-      return getDefaultState();
     }
-    return getDefaultState();
-  });
+  }, []);
 
   let user:
     | { username: string; region: string; loginTime: string }
