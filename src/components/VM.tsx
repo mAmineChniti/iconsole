@@ -126,36 +126,18 @@ export function VM() {
   const currentStepIndex = steps.findIndex((step) => step.key === currentStep);
 
   const goToNextStep = async () => {
-    let isValid = false;
+    const formMap = {
+      flavor: flavorForm,
+      image: imageForm,
+      network: networkForm,
+      details: vmDetailsForm,
+    };
+    const form = formMap[currentStep as keyof typeof formMap];
+    if (!form) return;
 
-    switch (currentStep) {
-      case "flavor":
-        isValid = await flavorForm.trigger();
-        if (isValid) {
-          setCombinedData((prev) => ({ ...prev, ...flavorForm.getValues() }));
-        }
-        break;
-      case "image":
-        isValid = await imageForm.trigger();
-        if (isValid) {
-          setCombinedData((prev) => ({ ...prev, ...imageForm.getValues() }));
-        }
-        break;
-      case "network":
-        isValid = await networkForm.trigger();
-        if (isValid) {
-          setCombinedData((prev) => ({ ...prev, ...networkForm.getValues() }));
-        }
-        break;
-      case "details":
-        isValid = await vmDetailsForm.trigger();
-        if (isValid) {
-          setCombinedData((prev) => ({
-            ...prev,
-            ...vmDetailsForm.getValues(),
-          }));
-        }
-        break;
+    const isValid = await form.trigger();
+    if (isValid) {
+      setCombinedData((prev) => ({ ...prev, ...form.getValues() }));
     }
 
     if (isValid && currentStepIndex < steps.length - 1) {
@@ -192,15 +174,8 @@ export function VM() {
       // Optionally invalidate queries if needed
       await queryClient.invalidateQueries({ queryKey: ["instances-list"] });
     },
-    onError: (error: unknown) => {
-      const errorMessage =
-        error && typeof error === "object" && "message" in error
-          ? ((error as { message?: string }).message ??
-            "An unexpected error occurred")
-          : "An unexpected error occurred";
-      toast.error("Failed to create VM", {
-        description: errorMessage,
-      });
+    onError: (error) => {
+      toast.error(`Failed to create VM: ${error.message}`);
     },
   });
 
@@ -231,15 +206,8 @@ export function VM() {
       setImportFile(undefined);
       await queryClient.invalidateQueries({ queryKey: ["instances-list"] });
     },
-    onError: (error: unknown) => {
-      const errorMessage =
-        error && typeof error === "object" && "message" in error
-          ? ((error as { message?: string }).message ??
-            "An unexpected error occurred")
-          : "An unexpected error occurred";
-      toast.error("Failed to import VM", {
-        description: errorMessage,
-      });
+    onError: (error) => {
+      toast.error(`Failed to import VM: ${error.message}`);
     },
   });
 
@@ -258,7 +226,11 @@ export function VM() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-1 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50 rounded-xl p-1">
+      <div
+        className="flex items-center space-x-1 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50 rounded-xl p-1"
+        role="tablist"
+        aria-label="VM tabs"
+      >
         <Button
           variant={activeTab === "create" ? "default" : "ghost"}
           className={cn(
@@ -267,6 +239,10 @@ export function VM() {
               "bg-blue-600 hover:bg-blue-700 text-white shadow-sm",
           )}
           onClick={() => setActiveTab("create")}
+          role="tab"
+          aria-selected={activeTab === "create"}
+          aria-controls="create-tab-panel"
+          id="create-tab"
         >
           <Plus className="h-4 w-4 mr-2" />
           Create VM
@@ -279,6 +255,10 @@ export function VM() {
               "bg-blue-600 hover:bg-blue-700 text-white shadow-sm",
           )}
           onClick={() => setActiveTab("import")}
+          role="tab"
+          aria-selected={activeTab === "import"}
+          aria-controls="import-tab-panel"
+          id="import-tab"
         >
           <Upload className="h-4 w-4 mr-2" />
           Import VM
@@ -286,7 +266,13 @@ export function VM() {
       </div>
 
       {activeTab === "create" ? (
-        <div className="space-y-6">
+        <div
+          className="space-y-6"
+          role="tabpanel"
+          id="create-tab-panel"
+          aria-labelledby="create-tab"
+          tabIndex={0}
+        >
           <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border/50">
             <CardContent className="p-6">
               <div className="flex items-center w-full">
@@ -438,15 +424,22 @@ export function VM() {
           </Card>
         </div>
       ) : (
-        <ImportVMTab
-          form={importForm}
-          resources={resources}
-          isLoading={resourcesLoading}
-          onImportVM={(data) => importVMMutation.mutate(data)}
-          isCreating={importVMMutation.isPending}
-          importFile={importFile}
-          setImportFile={setImportFile}
-        />
+        <div
+          role="tabpanel"
+          id="import-tab-panel"
+          aria-labelledby="import-tab"
+          tabIndex={0}
+        >
+          <ImportVMTab
+            form={importForm}
+            resources={resources}
+            isLoading={resourcesLoading}
+            onImportVM={(data) => importVMMutation.mutate(data)}
+            isCreating={importVMMutation.isPending}
+            importFile={importFile}
+            setImportFile={setImportFile}
+          />
+        </div>
       )}
     </div>
   );

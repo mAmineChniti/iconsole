@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -89,7 +90,7 @@ export function SummaryStep({
             <div className="flex justify-between">
               <span className="text-muted-foreground">Image ID:</span>
               <span className="text-xs font-mono">
-                {selectedImage?.id.slice(0, 8)}...
+                {selectedImage?.id.slice(0, 8) ?? "N/A"}...
               </span>
             </div>
           </CardContent>

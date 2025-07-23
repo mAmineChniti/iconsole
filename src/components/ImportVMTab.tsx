@@ -32,6 +32,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type importVMSchema } from "@/types/RequestSchemas";
+import { toast } from "sonner";
 
 type ImportVMFormData = z.infer<typeof importVMSchema>;
 
@@ -55,6 +56,12 @@ export function ImportVMTab({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (!file.name.toLowerCase().endsWith(".vmdk")) {
+        toast.error("Invalid file type", {
+          description: "Please select a valid VMDK file",
+        });
+        return;
+      }
       setImportFile(file);
     }
   };
@@ -168,7 +175,6 @@ export function ImportVMTab({
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onImportVM)} className="space-y-6">
-            {/* File Upload Section */}
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium">VMDK File</label>
@@ -207,7 +213,6 @@ export function ImportVMTab({
 
             <Separator />
 
-            {/* VM Configuration */}
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
@@ -276,7 +281,6 @@ export function ImportVMTab({
               />
             </div>
 
-            {/* Resource Selection */}
             <div className="grid gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}

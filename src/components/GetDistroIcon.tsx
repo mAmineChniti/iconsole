@@ -1,6 +1,8 @@
 import { Server } from "lucide-react";
 import Image from "next/image";
-export function getDistroIcon(imageName: string) {
+import { useState } from "react";
+export function GetDistroIcon({ imageName }: { imageName: string }) {
+  const [imageError, setImageError] = useState(false);
   const name = imageName.toLowerCase();
 
   const baseLogoUrl =
@@ -145,38 +147,36 @@ export function getDistroIcon(imageName: string) {
     if (matchedDistro.key === "windows") {
       return (
         <div className="flex-shrink-0">
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/32px-Windows_logo_-_2012.svg.png"
-            alt={matchedDistro.alt}
-            width={32}
-            height={32}
-            className="w-8 h-8"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = "none";
-              target.nextElementSibling?.classList.remove("hidden");
-            }}
-          />
-          <Server className="h-8 w-8 text-gray-600 dark:text-gray-400 hidden" />
+          {!imageError ? (
+            <Image
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/32px-Windows_logo_-_2012.svg.png"
+              alt={matchedDistro.alt}
+              width={32}
+              height={32}
+              className="w-8 h-8"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <Server className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+          )}
         </div>
       );
     }
 
     return (
       <div className="flex-shrink-0">
-        <Image
-          src={`${baseLogoUrl}/${matchedDistro.filename}`}
-          alt={matchedDistro.alt}
-          width={32}
-          height={32}
-          className="w-8 h-8"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.style.display = "none";
-            target.nextElementSibling?.classList.remove("hidden");
-          }}
-        />
-        <Server className="h-8 w-8 text-gray-600 dark:text-gray-400 hidden" />
+        {!imageError ? (
+          <Image
+            src={`${baseLogoUrl}/${matchedDistro.filename}`}
+            alt={matchedDistro.alt}
+            width={32}
+            height={32}
+            className="w-8 h-8"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <Server className="h-8 w-8 text-gray-600 dark:text-gray-400" />
+        )}
       </div>
     );
   }

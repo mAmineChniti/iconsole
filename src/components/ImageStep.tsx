@@ -1,4 +1,5 @@
-import { getDistroIcon } from "@/components/getDistroIcon";
+"use client";
+import { GetDistroIcon } from "@/components/GetDistroIcon";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -68,7 +69,11 @@ export function ImageStep({
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="p-2 rounded-full">
-                          {getDistroIcon(image.name)}
+                          <GetDistroIcon
+                            imageName={
+                              typeof image.name === "string" ? image.name : ""
+                            }
+                          />
                         </div>
                         <h3 className="font-semibold text-base leading-tight break-words">
                           {image.name}

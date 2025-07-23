@@ -76,12 +76,12 @@ export function NetworkStep({
                 </FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="!h-12 w-full">
+                    <SelectTrigger className="!h-12 w-full cursor-pointer">
                       <SelectValue placeholder="Select network" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {resources?.networks.map((network) => (
+                    {resources?.networks?.map((network) => (
                       <SelectItem key={network.id} value={network.id}>
                         {network.name}
                       </SelectItem>
@@ -104,12 +104,12 @@ export function NetworkStep({
                 </FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="!h-12 w-full">
+                    <SelectTrigger className="!h-12 w-full cursor-pointer">
                       <SelectValue placeholder="Select key pair" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {resources?.keypairs.map((keypair) => (
+                    {resources?.keypairs?.map((keypair) => (
                       <SelectItem key={keypair.name} value={keypair.name}>
                         {keypair.name}
                       </SelectItem>
@@ -133,12 +133,12 @@ export function NetworkStep({
               </FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="!h-12 w-full">
+                  <SelectTrigger className="!h-12 w-full cursor-pointer">
                     <SelectValue placeholder="Select security group" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {resources?.security_groups.map((group) => (
+                  {resources?.security_groups?.map((group) => (
                     <SelectItem key={group.name} value={group.name}>
                       {group.name}
                     </SelectItem>
