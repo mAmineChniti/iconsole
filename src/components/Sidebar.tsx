@@ -98,17 +98,24 @@ export function Sidebar() {
 
   const pathname = usePathname();
   useEffect(() => {
+    const newState = { ...getDefaultState() };
+
+    for (const key of Object.keys(collapsibleRoutes)) {
+      const routes = collapsibleRoutes[key];
+
+      if (routes && routes.includes(pathname)) {
+        newState[key] = true;
+      }
+    }
+
     setCollapsibleOpen((prev) => {
-      const updated: Record<string, boolean> = { ...prev };
-      Object.keys(collapsibleRoutes).forEach((key) => {
-        const routes = collapsibleRoutes[key];
-        if (prev[key] && Array.isArray(routes)) {
-          if (!routes.includes(pathname)) {
-            updated[key] = false;
-          }
-        }
-      });
-      return updated;
+      const manuallyOpened = Object.keys(prev).filter(
+        (k) => prev[k] && !newState[k],
+      );
+      for (const key of manuallyOpened) {
+        newState[key] = true;
+      }
+      return newState;
     });
   }, [pathname]);
 
@@ -127,7 +134,16 @@ export function Sidebar() {
   };
 
   const handleCollapsibleChange = (key: string, open: boolean) => {
-    setCollapsibleOpen((prev) => ({ ...prev, [key]: open }));
+    setCollapsibleOpen((prev) => {
+      const updated = Object.keys(prev).reduce(
+        (acc, k) => {
+          acc[k] = k === key ? open : false;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+      return updated;
+    });
   };
 
   return (
